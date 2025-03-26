@@ -1,0 +1,123 @@
+Anreox - Sporcu Odaklı Fitness ve Beslenme Platformu
+
+Proje Amacı
+
+Anreox, sporcuların fitness ve beslenme süreçlerini yönetebileceği tamamen ücretsiz bir platformdur. Kullanıcılar, kendi antrenman ve beslenme programlarını oluşturabilir ve takip edebilir.
+
+Teknik Yapı
+
+Frontend
+
+Framework: Next.js (React + TypeScript)
+
+Durum Yönetimi: React Context API / Zustand
+
+Stil & UI: Tailwind CSS, Shadcn/UI
+
+Form Yönetimi: React Hook Form, Zod
+
+Bildirimler: React Toastify
+
+Çoklu Dil Desteği: Next.js i18n
+
+Performans Optimizasyonu: Lazy Loading, Code Splitting, ISR (Incremental Static Regeneration)
+
+Backend
+
+Runtime: Node.js
+
+Framework: Express.js / Fastify
+
+Veritabanı: PostgreSQL (Prisma ORM ile)
+
+Önbellekleme: Redis
+
+Dosya Depolama: AWS S3 / Cloudinary
+
+Gerçek Zamanlı İşlemler: WebSockets (Socket.io)
+
+Arkaplan İşlemleri: BullMQ (Redis tabanlı iş kuyruğu)
+
+Kimlik Doğrulama ve Güvenlik
+
+Kimlik Doğrulama: JWT (JSON Web Token) / Auth0
+
+Şifreleme: bcrypt.js
+
+İzin Yönetimi: Role-Based Access Control (RBAC)
+
+Güvenlik Önlemleri: CORS, Helmet, Rate Limiting
+
+Diğer Entegrasyonlar
+
+Ödeme Sistemleri: Stripe / PayPal
+
+Analitik: Google Analytics, PostHog
+
+Bildirim Sistemleri: Firebase Cloud Messaging (FCM), OneSignal
+
+E-posta Servisi: Nodemailer / Resend
+
+SEO ve Optimizasyon: Next.js SEO, Open Graph Meta Tags
+
+Loglama & İzleme: Winston, Sentry, Datadog
+
+Görsel ve Etkileşimli Kütüphaneler
+
+🏆 Animasyon ve Geçiş Efektleri
+
+LottieFiles: JSON tabanlı animasyonlar.
+
+GSAP: Yüksek performanslı geçiş animasyonları.
+
+Framer Motion: React için güçlü bir animasyon kütüphanesi.
+
+React Spring: Fizik tabanlı animasyonlar.
+
+🎨 3D Deneyimler ve Etkileşimler
+
+Three.js: WebGL tabanlı 3D grafikler.
+
+Spline: No-code 3D tasarım aracı.
+
+React Three Fiber: React için optimize edilmiş 3D grafik kütüphanesi.
+
+Babylon.js: WebGL için gelişmiş bir 3D motor.
+
+📊 Veri Görselleştirme ve Grafikler
+
+D3.js: Dinamik ve etkileşimli veri görselleştirme.
+
+ApexCharts: Modern grafikler.
+
+Recharts: React için kolay grafik çizimi.
+
+Chart.js: Güçlü ve basit grafikler.
+
+🎭 Arayüz Tasarımı ve Efektler
+
+Figma: UI/UX tasarımları.
+
+Glassmorphism: Modern cam efekti.
+
+Styled Components: Bileşen tabanlı CSS yönetimi.
+
+🎬 Medya ve Video İşleme
+
+React Player: YouTube, Vimeo gibi platformlardan medya oynatma.
+
+FFmpeg.js: Tarayıcı içinde video düzenleme.
+
+🔥 Kullanıcı Deneyimi ve Efektler
+
+Parallax.js: Sayfa kaydırıldıkça derinlik hissi.
+
+Locomotive Scroll: Akıcı kaydırma efektleri.
+
+Lenis Smooth Scroll: Optimize edilmiş yumuşak kaydırma.
+
+React Tooltip: Kullanıcı deneyimini artırmak için bilgi baloncukları.
+
+Sonuç
+
+Anreox'un ilk sürümü, sporcuların kendi programlarını yönetebileceği bir sistem olarak geliştirilecektir. Gelecekte yapay zeka destekli analizler, 3D sporcu kütüphanesi ve daha fazla özellik ile genişletilecektir.

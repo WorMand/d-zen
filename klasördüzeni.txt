@@ -1,0 +1,71 @@
+.env
+.gitignore
+.prettierrc
+components.json
+eslint.config.mjs
+middleware.ts
+next-env.d.ts
+next-i18next.config.ts
+next.config.ts
+package.json
+postcss.config.mjs
+README.md
+tailwind.config.ts
+tsconfig.json
+.next/
+    _events.json
+    app-build-manifest.json
+    build-manifest.json
+    fallback-build-manifest.json
+    package.json
+    trace
+    transform.js
+    transform.js.map
+    build/
+        chunks/
+    cache/
+        .rscinfo
+    server/
+        app-paths-manifest.json
+        interception-route-rewrite-manifest.js
+        middleware-build-manifest.js
+        middleware-manifest.json
+        next-font-manifest.js
+        next-font-manifest.json
+        pages-manifest.json
+        server-reference-manifest.js
+        server-reference-manifest.json
+        app/
+        chunks/
+        edge/
+        middleware/
+        pages/
+    static/
+        chunks/
+        development/
+        media/
+    types/
+prisma/
+    schema.prisma
+public/
+    fonts/
+    images/
+        favicon.ico
+        file.svg
+        globe.svg
+        next.svg
+        vercel.svg
+        window.svg
+src/
+    app/
+        layout.tsx
+        page.tsx
+        ...
+    components/
+    constants/
+    contexts/
+    hooks/
+    lib/
+    locales/
+    models/
+    styles/
