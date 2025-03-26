@@ -1,0 +1,102 @@
+Anreox Fitness Platformu v1.0 için bir kullanıcı paneli tasarlayın. Bu panel, kullanıcıların sporcu beslenme ve workout programlarını detaylı, ayrıntılı ve tamamen özelleştirilebilir şekilde düzenlemelerine olanak tanımalıdır. Kullanıcılar, fitness hedeflerine ulaşmak için planlarını kendi ihtiyaçlarına göre oluşturabilir, düzenleyebilir ve takip edebilir. v1.0, temel bir başlangıç noktasıdır ve manuel girişlere odaklanır; AI veya gelişmiş otomasyon içermez.
+
+Genel Gereksinimler:
+
+Kullanıcı arayüzü minimalist, kullanıcı dostu ve hızlı olmalıdır.
+Koyu mod ve açık mod desteği sağlanmalıdır.
+Teknik altyapı: Next.js 15+ (App Router, React 18+), Zustand + React Query (durum yönetimi), Tailwind CSS + Shadcn/UI (stil), Framer Motion (animasyonlar).
+Veritabanı: PostgreSQL + Prisma ORM ile entegre edilmelidir.
+Kimlik doğrulama: NextAuth.js ile e-posta ve parola tabanlı giriş/şifre sıfırlama.
+🌟 Ana Özellikler:
+
+🚀 1. Program Seçimi
+Kullanıcı, panelde “Program Oluştur” butonuna tıkladığında bir seçim ekranı açılır:
+Workout Programı (Antrenman)
+Beslenme Programı
+Seçilen program türüne göre dinamik bir modül açılır ve kullanıcıya ilgili içerikler sunulur.
+Arayüz: Seçim ekranı, iki büyük kart (Workout ve Beslenme) içeren minimalist bir tasarım; kartlara hover efektleri Framer Motion ile eklenir.
+🏋️ 2. Workout Programı (Antrenman Modülü)
+Kullanıcı, antrenmanlarını en detaylı şekilde planlayabilir.
+🔹 Hareket Seçimi & Kişiselleştirme:
+Kullanıcı, 500+ egzersiz içeren bir veritabanından hareket seçebilir (örneğin, "bench press", "squat").
+Arama çubuğu ve filtreleme (kas grubu: göğüs, bacak; ekipman: dumbbell, barbell).
+Seçilen hareketler için:
+Set Sayısı: Manuel giriş (örneğin, 4 set).
+Tekrar Sayısı: Manuel giriş (örneğin, 10 tekrar).
+Dinlenme Süresi: Zamanlayıcı ile özelleştirme (örneğin, 60 saniye).
+Ağırlık Ekleme: Opsiyonel giriş (örneğin, 50 kg).
+Kullanıcı özel egzersiz ekleyebilir (örneğin, "kendi HIIT rutinim" için isim ve açıklama).
+Şablonlar: Başlangıç, orta, ileri seviye için hazır planlar; tamamen özelleştirilebilir boş plan.
+📊 Veri & Analiz:
+Seçilen hareketlerin ortalama kalori yakımı veritabanından statik olarak gösterilir (örneğin, "squat: 10 kalori/set").
+Egzersizin kas grubu etkisi metinle belirtilir (örneğin, "squat: bacak, kalça").
+Zorluk seviyesi manuel olarak seçilebilir (Başlangıç, Orta, İleri).
+🧠 Akıllı Öneriler (Manuel):
+Kullanıcının geçmiş antrenmanlarına göre basit öneriler: Örneğin, "Geçen hafta bacak çalıştınız, bu hafta göğüs önerilir."
+Eksik kas grupları için bildirim: "Bu planda kol kasları eksik."
+Optimum tekrar/set önerisi: Kullanıcının hedefine göre statik bir tablo (örneğin, kas artışı için 8-12 tekrar).
+Arayüz:
+Haftalık takvim görünümü (Pazartesi: Göğüs, Salı: Bacak).
+Egzersiz kartları: Set/tekrar/ağırlık giriş alanları ve sürükle-bırak desteği.
+🥗 3. Beslenme Programı (Diyet Modülü)
+Kullanıcı, detaylı beslenme planları oluşturabilir.
+🔹 Besin Seçimi & Kişiselleştirme:
+Kullanıcı, 1000+ gıdadan oluşan veritabanından yiyecek seçebilir (örneğin, "tavuk göğsü", "yulaf").
+Arama çubuğu ile hızlı erişim.
+Seçilen besinler için:
+Porsiyon Miktarı: Gramaj (örneğin, 100g) veya birim (örneğin, 1 bardak).
+Öğün Zamanı: Kahvaltı, öğle yemeği, akşam yemeği, ara öğün seçenekleri.
+Makro Besinler: Kalori, protein, karbonhidrat, yağ oranları otomatik gösterilir.
+Mikro Besinler: Vitamin ve mineral değerleri veritabanından listelenir.
+Kullanıcı özel yiyecek ekleyebilir (örneğin, "ev yapımı protein bar" için kalori/makro manuel girilir).
+📊 Veri & Analiz:
+Günlük toplam kalori ve makro besin değerleri (hedef vs. tüketilen) çubuk grafiği ile gösterilir.
+Su tüketimi takibi: Kullanıcı manuel giriş yapar (örneğin, 2 litre).
+Eksik besin önerileri: "200 kcal eksik, 50g tavuk ekleyebilirsiniz."
+🧠 Akıllı Öneriler (Manuel):
+Hedeflere göre basit öneriler: "Kas yapma için daha fazla protein ekleyin (hedef: 100g, şu an: 70g)."
+Eksik/fazla besin bildirimi: "Günlük yağ hedefini aştınız."
+Besin alternatifi: Veritabanından statik öneriler (örneğin, "tavuk yerine hindi").
+Arayüz:
+Tablo veya kart tabanlı düzen; her öğün için ekleme/düzenleme butonları.
+🎯 4. Ekstra Özellikler
+📅 Haftalık & Aylık Planlama:
+Kullanıcı, workout ve beslenme programını haftalık olarak planlar (gün bazlı editör).
+Dinamik takvim: Geçmiş ve gelecek planlar görüntülenebilir (aylık görünüm basit bir liste).
+🔔 Hatırlatıcılar & Bildirimler:
+Basit hatırlatıcılar: Kullanıcı manuel zaman ayarı yapar (örneğin, "18:00 - Antrenman").
+Su tüketimi bildirimi: "Bugün su içmeyi unutmayın" (statik uyarı).
+📈 İlerleme Takibi & Raporlar:
+Vücut ölçümleri (kol, göğüs, bel) manuel girişle takip edilir.
+Performans geçmişi: Ağırlık/tekrar grafiği (örneğin, bench press ilerlemesi).
+Haftalık özet: Hedeflere uyum yüzdesi (örneğin, %85).
+Dışa aktarma: Plan PDF/CSV formatında indirilebilir.
+🖥️ Fütüristik Arayüz & Deneyim:
+Dark mode ve ışık modu desteği (kullanıcı seçimli).
+Butonlarda Framer Motion ile geçiş animasyonları (örneğin, hover’da büyüme).
+Minimalist tasarım: Yüksek teknoloji hissi, gereksiz detaylardan arındırılmış.
+5. Profil Yönetimi
+Temel Profil:
+Kullanıcı adı, yaş, cinsiyet, boy, kilo.
+Fitness hedefi: Kas artışı, yağ yakımı, dayanıklılık.
+Aktivite seviyesi: Sedanter, orta, aktif.
+Veri Girişi:
+Manuel vücut ölçümleri (cm).
+Günlük kalori hedefi (örneğin, 2000 kcal).
+Arayüz:
+Basit form, kaydedilen veriler özet panelinde görünür.
+6. Özelleştirme ve Esneklik
+Drag-and-Drop Arayüzü: Egzersiz ve yiyecek sıralaması değiştirilebilir.
+Kopyala-Yapıştır: Günlük planlar haftanın diğer günlerine kopyalanabilir.
+Favoriler: Sık kullanılan yiyecek/egzersizler kaydedilir, hızlı erişim sekmesi.
+Ek Notlar:
+
+Tüm veriler PostgreSQL’e kaydedilir, Prisma ORM ile yönetilir.
+Animasyonlar Framer Motion ile uygulanır (örneğin, kart hover efektleri).
+Güvenlik: AES-256 şifreleme, yalnızca kimlik doğrulamalı erişim.
+Performans: Hızlı yükleme, gereksiz karmaşadan uzak tasarım.
+Çıktı Beklentisi:
+
+Kullanıcı paneli, yukarıdaki özelliklere uygun bir web arayüzü olarak geliştirilmeli.
+Sekmeler: Profil, Program Seçimi (Workout/Beslenme), Takip.
+Örnek akış: Giriş → Hedef girme → Program oluşturma → Takip.
