@@ -1,0 +1,221 @@
+id,name,calories_base
+1,Stability Ball Dead Bug,150
+2,Bodyweight Glute Bridge,120
+3,Bodyweight Bird Dog,100
+4,Stability Ball Russian Twist,180
+5,Stability Ball Feet Elevated Crunch,200
+6,Ring Hanging Knee Raise,230
+7,Parallette Mountain Climber,250
+8,Parallette Push Up,200
+9,Bodyweight Knee Hover Bird Dog,130
+10,Stability Ball V Up Pass,190
+11,Bodyweight Dead Bug,110
+12,Bodyweight Alternating Heel Taps,120
+13,Bodyweight Flutter Kicks,180
+14,Bodyweight Kneeling Forearm Plank,150
+15,Bodyweight Seated Ab Circles,140
+16,Ring Hanging Oblique Knee Raise,250
+17,Stability Ball Stir the Pot,200
+18,Bodyweight Alternating Lateral Kick Through,230
+19,Ring L Sit Hang Flutter Kicks,300
+20,Slam Ball Russian Twist,210
+21,Dumbbell Otis Up,200
+22,Single Arm Dumbbell Side Plank Reach Through,180
+23,Ab Wheel Kneeling Rollout,220
+24,Cable Seated Crunch,170
+25,Cable Kneeling Crunch,170
+26,Medicine Ball V Up,210
+27,Suspension Knee Tuck,220
+28,Suspension Lateral Knee Tuck,230
+29,Suspension Archer Row,220
+30,Single Arm Dumbbell Turkish Get Up,240
+31,Bodyweight Bear Crawl,270
+32,Stability Ball Knee Tuck,200
+33,Ring Hanging Leg Raise,280
+34,Parallette L Sit,250
+35,Bodyweight Side Lying Hip Adduction,120
+36,Bodyweight Standing Walkout Plank,180
+37,Ring Eccentric Pull Up,210
+38,Barbell Climb,320
+39,Bodyweight Ipsilateral Bird Dog,140
+40,Bodyweight Copenhagen Plank Knee to Elbow,220
+41,Ring Eccentric Chin Up,210
+42,Single Arm Dumbbell Seated Shoulder External Rotation,110
+43,Double Dumbbell Seated Cuban Rotation,140
+44,Double Dumbbell Standing Cuban Rotation,150
+45,Single Arm Cable Half Kneeling Contralateral Shoulder External Rotation 90 Degrees,130
+46,Miniband Fire Hydrant,120
+47,Medicine Ball Russian Twist,200
+48,Bodyweight Side Plank,140
+49,Cable Reverse Crunch,180
+50,Cable Rope Half Kneeling High to Low Chop,190
+51,Cable Rope Half Kneeling Low to High Chop,190
+52,Slider Double Kettlebell Bottoms Up Overhead Lateral Lunge,280
+53,Cable Rope Staggered Stance High to Low Chop,200
+54,Cable Rope Staggered Stance Low to High Chop,200
+55,Single Arm Dumbbell Windmill,180
+56,Slider Double Kettlebell Bottoms Up Front Rack Lateral Lunge,260
+57,Slider Double Kettlebell Front Rack Lateral Lunge,240
+58,Bodyweight Feet On Wall Mountain Climber,240
+59,Slider Double Kettlebell Suitcase Reverse Lunge,250
+60,Bodyweight Hollow Body Hold,160
+61,Dumbbell Crush Grip Hollow Body Hold,180
+62,Bar Inverted Hanging Crunch,220
+63,Bodyweight Inverted Hanging Oblique Crunch,220
+64,Slider Double Kettlebell Front Rack Reverse Lunge,250
+65,Bodyweight Supine Alternating Single Leg Raise,140
+66,Bodyweight Supine Leg Raise,150
+67,Miniband Bicycle Crunch,170
+68,Bodyweight Side Plank Reach Through,160
+69,Bodyweight Sit Up,120
+70,Bodyweight Butterfly Sit Up,140
+71,Slider Mountain Climber,230
+72,Slider Pike,240
+73,Stability Ball Pike,240
+74,Slider Wide Mountain Climber,240
+75,Stability Ball Crunch,160
+76,Stability Ball Feet Elevated Oblique Crunch,170
+77,Stability Ball Kneeling Rollout,190
+78,Stability Ball Single Leg Knee Tuck,220
+79,Stability Ball Single Leg Pike,250
+80,Double Dumbbell Z Press,220
+81,Slider Double Kettlebell Overhead Reverse Lunge,270
+82,Double Dumbbell Romanian Deadlift,260
+83,Single Arm Dumbbell Side Plank,170
+84,Bodyweight Single Leg Glute Bridge,140
+85,Dumbbell Glute Bridge,160
+86,Bodyweight Glute Bridge Isometric with Alternating Single Leg Extension,150
+87,Miniband Side Lying Clamshell,110
+88,Miniband Ankle Side Lying Hip Abduction,120
+89,Miniband Bench Seated Hip Abduction,130
+90,Miniband Glute Bridge with Hip Abduction,150
+91,Stability Ball Hip Thrust,180
+92,Stability Ball Dumbbell Hip Thrust,210
+93,Bodyweight Frog Pump,130
+94,Dumbbell Frog Pump,150
+95,Cable Glute Kickback,140
+96,Bodyweight Single Leg Foot Elevated Glute Bridge,150
+97,Suspension Feet Elevated Glute Bridge,170
+98,Miniband Thigh Lateral Walk,140
+99,Miniband Ankle Lateral Walk,130
+100,Miniband Feet Lateral Walk,140
+101,Barbell Bench Press,280
+102,Barbell Squat,320
+103,Barbell Deadlift,350
+104,Pull-Up,250
+105,Push-Up,180
+106,Plank,150
+107,Dumbbell Shoulder Press,220
+108,Kettlebell Swing,260
+109,Burpee,300
+110,Lunges,240
+111,Mountain Climber,260
+112,Jumping Jacks,200
+113,High Knees,240
+114,Box Jump,280
+115,Jump Rope,300
+116,Battle Ropes,300
+117,Rowing Machine,300
+118,Assault Bike,350
+119,Versa Climber,400
+120,Ski Erg,320
+121,TRX Row,200
+122,Wall Ball,250
+123,Sled Push,350
+124,Sled Pull,330
+125,Farmer's Carry,270
+126,Overhead Carry,240
+127,Turkish Get-Up,220
+128,Clean and Press,280
+129,Snatch,300
+130,Thruster,290
+131,Front Squat,290
+132,Back Squat,300
+133,Overhead Squat,280
+134,Push Press,260
+135,Split Jerk,270
+136,Clean Pull,260
+137,Snatch Pull,270
+138,Deadlift High Pull,290
+139,Hang Clean,280
+140,Power Clean,290
+141,Power Snatch,300
+142,Medicine Ball Slam,270
+143,Medicine Ball Throw,260
+144,Kettlebell Goblet Squat,250
+145,Kettlebell Snatch,270
+146,Kettlebell Clean,260
+147,Kettlebell Windmill,220
+148,Kettlebell Turkish Get-Up,230
+149,Kettlebell Clean and Press,280
+150,Renegade Row,240
+151,Bent Over Row,230
+152,Lat Pulldown,200
+153,Face Pull,180
+154,Overhead Press,220
+155,Push Press,240
+156,Dips,210
+157,Tricep Extensions,150
+158,Bicep Curls,160
+159,Hammer Curls,160
+160,Preacher Curls,160
+161,Skull Crushers,170
+162,Lateral Raises,150
+163,Front Raises,160
+164,Reverse Flyes,160
+165,Chest Flyes,170
+166,Incline Bench Press,260
+167,Decline Bench Press,250
+168,Close Grip Bench Press,240
+169,Leg Extension,180
+170,Leg Curl,180
+171,Leg Press,260
+172,Hack Squat,270
+173,Seated Calf Raise,150
+174,Standing Calf Raise,160
+175,Hip Thrust,220
+176,Cable Kickback,160
+177,Reverse Hyperextension,190
+178,GHD Sit-up,220
+179,Ab Wheel Rollout,200
+180,Dragon Flag,230
+181,Hanging Leg Raises,220
+182,Toes to Bar,240
+183,L-Sit,190
+184,Ring Muscle-Up,300
+185,Bar Muscle-Up,310
+186,Handstand Push-Up,260
+187,Strict Press,210
+188,Push Jerk,250
+189,Split Jerk,260
+190,Wall Ball,240
+191,Box Jump,280
+192,Double Under,280
+193,Strict Pull-Up,230
+194,Kipping Pull-Up,240
+195,Butterfly Pull-Up,240
+196,Chest-to-Bar Pull-Up,250
+197,Ring Dip,220
+198,Pistol Squat,230
+199,Shrimp Squat,220
+200,Nordic Hamstring Curl,210
+201,Yoga Flow,180
+202,Pilates Mat Workout,200
+203,HIIT Circuit Training,350
+204,Indoor Cycling,300
+205,Freestyle Swimming,350
+206,Jogging,300
+207,Rowing Machine Intervals,320
+208,Kickboxing,330
+209,Battle Rope Waves,280
+210,Elliptical Trainer,270
+211,Stair Climber,290
+212,Tabata Training,320
+213,TRX Suspension Training,240
+214,CrossFit WOD,350
+215,Bodyweight HIIT Circuit,310
+216,Boxing Heavy Bag,320
+217,Spinning Class,330
+218,Aqua Aerobics,220
+219,Trail Running,340
+220,Power Yoga,230
