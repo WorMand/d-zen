@@ -1,0 +1,463 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Kullanıcı Modeli: Ultra Güvenlik ve İlişkiler
+model User {
+  id                 String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  encryptedName      String            @db.Text // Encrypted
+  encryptedEmail     String            @unique @db.Text // Encrypted
+  username           String            @unique @db.VarChar(50)
+  encryptedPasskey   String            @db.Text // Encrypted (FIDO2/WebAuthn)
+  twoFactorSecret    String            @db.Text // Encrypted (TOTP)
+  age                Int?              // Encrypted
+  gender             Gender?           // Encrypted
+  weight             Float?            // Encrypted
+  height             Float?            // Encrypted
+  goal               Goal              @default(maintenance)
+  role               UserRole          @default(user)
+  subscription       SubscriptionStatus @default(free)
+  premiumExpiresAt   DateTime?
+  isVerified         Boolean           @default(false)
+  devices            UserDevice[]
+  sessions           UserSession[]
+  ipWhitelist        String[]          @default([]) // IP kısıtlaması
+  failedLoginAttempts Int              @default(0) // Brute-force koruması
+  lockUntil          DateTime?         // Hesap kilitleme
+  consentGiven       Boolean           @default(false) // GDPR uyumluluğu
+  dataRetentionPeriod DateTime?        // Veri saklama süresi
+  isActive           Boolean           @default(true) @map("is_active")
+  createdAt          DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime          @default(now()) @map("updated_at") @db.Timestamptz(6)
+  deletedAt          DateTime?         @map("deleted_at") @db.Timestamptz(6)
+  cacheKey           String?           @unique @db.VarChar(100) // Önbellek anahtarı
+  auditLogs          AuditLog[]
+  bodyMeasurements   BodyMeasurement[]
+  foodLogs           FoodLog[]
+  progressLogs       ProgressLog[]
+  mealPlans          UserMealPlan[]
+  workouts           UserWorkout[]
+  workoutLogs        WorkoutLog[]
+  equipments         UserEquipment[]
+  chatLogs           UserChatLog[]
+  transactionsAsBuyer Transaction[]   @relation("Buyer")
+  transactionsAsSeller Transaction[]  @relation("Seller")
+  aiPreferences      UserAIPreference?
+  permissions        UserPermission[]
+
+  @@index([encryptedEmail, subscription, isActive])
+  @@index([username, failedLoginAttempts])
+  @@index([deletedAt])
+  @@map("users")
+}
+
+// Kullanıcı Cihazları
+model UserDevice {
+  id          Int      @id @default(autoincrement())
+  userId      String   @map("user_id") @db.Uuid
+  deviceId    String   @unique @db.VarChar(255) // Encrypted
+  deviceName  String   @db.VarChar(100) // Encrypted
+  lastIp      String   @db.VarChar(45)
+  lastSeen    DateTime @default(now()) @db.Timestamptz(6)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, deviceId])
+  @@map("user_devices")
+}
+
+// Kullanıcı Oturumları
+model UserSession {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId      String    @map("user_id") @db.Uuid
+  deviceId    String    @db.VarChar(255)
+  tokenHash   String    @db.Text // Encrypted
+  ipAddress   String    @db.VarChar(45)
+  expiresAt   DateTime  @db.Timestamptz(6)
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  revokedAt   DateTime? @map("revoked_at") @db.Timestamptz(6)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, expiresAt, revokedAt])
+  @@map("user_sessions")
+}
+
+// Kullanıcı İzinleri (ABAC)
+model UserPermission {
+  id          Int      @id @default(autoincrement())
+  userId      String   @map("user_id") @db.Uuid
+  resource    String   @db.VarChar(50) // "mealPlan", "workout"
+  action      String   @db.VarChar(20) // "read", "write", "delete"
+  attributes  Json     // {"scope": "own", "priority": "high"}
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, resource, action])
+  @@map("user_permissions")
+}
+
+// Güvenlik Olayları
+model SecurityEvent {
+  id          BigInt    @id @default(autoincrement())
+  userId      String?   @db.Uuid
+  eventType   String    @db.VarChar(50) // "failed_login", "permission_denied"
+  ipAddress   String    @db.VarChar(45)
+  deviceId    String?   @db.VarChar(255)
+  details     Json?     // Encrypted
+  createdAt   DateTime  @default(now()) @db.Timestamptz(6)
+  @@index([userId, eventType, createdAt])
+  @@map("security_events")
+  // Note: Zaman serisi verileri için TimescaleDB hypertable olarak ayarlanabilir
+}
+
+// Kullanıcı Ekipmanları
+model UserEquipment {
+  id          Int      @id @default(autoincrement())
+  userId      String   @map("user_id") @db.Uuid
+  encryptedName String  @db.Text // Encrypted
+  quantity    Int?     @default(1) // Encrypted
+  weight      Float?   // Encrypted
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime @default(now()) @map("updated_at") @db.Timestamptz(6)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("user_equipments")
+}
+
+// AI Sohbet Logları
+model UserChatLog {
+  id            BigInt    @id @default(autoincrement())
+  userId        String    @map("user_id") @db.Uuid
+  encryptedMessage String   @db.Text // Encrypted
+  encryptedResponse String  @db.Text // Encrypted
+  isModerated   Boolean   @default(false)
+  moderationNotes String?  @db.Text // Encrypted
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt, isModerated])
+  @@map("user_chat_logs")
+  // Note: Zaman serisi verileri için TimescaleDB hypertable olarak ayarlanabilir
+}
+
+// Egzersizler
+model Exercise {
+  id               Int               @id @default(autoincrement())
+  name             String            @unique @db.VarChar(255)
+  muscleGroup      String            @map("muscle_group") @db.VarChar(100)
+  encryptedDescription String?      @db.Text // Encrypted
+  difficulty       Difficulty        @default(medium)
+  equipmentRequired String?          @db.VarChar(100)
+  intensityLevel   Int?              @default(5)
+  videoUrl         String?           @db.VarChar(255) // Encrypted
+  createdAt        DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime          @default(now()) @map("updated_at") @db.Timestamptz(6)
+  workoutExercises WorkoutExercise[]
+  workoutLogs      WorkoutLog[]
+
+  @@index([muscleGroup, difficulty, intensityLevel])
+  @@map("exercises")
+}
+
+// Kullanıcı Antrenman Planları
+model UserWorkout {
+  id               Int               @id @default(autoincrement())
+  userId           String            @map("user_id") @db.Uuid
+  displayName      String            @db.VarChar(100) // Yeni: Paket adı
+  encryptedName    String            @db.Text // Encrypted
+  encryptedDescription String?       @db.Text // Encrypted
+  isPublic         Boolean           @default(false)
+  price            Float?            // Encrypted
+  rating           Float?            @default(0)
+  soldCount        Int               @default(0)
+  tags             String[]          @default([])
+  visibilityToken  String?           @unique @db.VarChar(255)
+  createdAt        DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime          @default(now()) @map("updated_at") @db.Timestamptz(6)
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workoutExercises WorkoutExercise[]
+  transactions     Transaction[]
+
+  @@index([userId, isPublic, rating])
+  @@map("user_workouts")
+}}
+
+// Antrenman Egzersizleri
+model WorkoutExercise {
+  id         Int         @id @default(autoincrement())
+  workoutId  Int         @map("workout_id")
+  exerciseId Int         @map("exercise_id")
+  sets       Int         @default(3) // Encrypted
+  reps       Int         @default(10) // Encrypted
+  restTime   Int         @default(60) @map("rest_time") // Encrypted
+  dayOfWeek  Int?        @map("day_of_week")
+  weight     Float?      // Encrypted
+  encryptedNotes String?  @db.Text // Encrypted
+  createdAt  DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime    @default(now()) @map("updated_at") @db.Timestamptz(6)
+  exercise   Exercise    @relation(fields: [exerciseId], references: [id])
+  workout    UserWorkout @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+
+  @@index([workoutId, exerciseId, dayOfWeek])
+  @@map("workout_exercises")
+}
+
+// Antrenman Logları
+model WorkoutLog {
+  id            BigInt    @id @default(autoincrement())
+  userId        String    @map("user_id") @db.Uuid
+  exerciseId    Int       @map("exercise_id")
+  date          DateTime  @default(now()) @db.Timestamptz(6)
+  setsCompleted Int       @map("sets_completed") // Encrypted
+  repsCompleted Int       @map("reps_completed") // Encrypted
+  weightUsed    Float?    @map("weight_used") // Encrypted
+  duration      Int?      // Encrypted
+  effortLevel   Int?      @default(5) // Encrypted
+  encryptedNotes String?  @db.Text // Encrypted
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  exercise      Exercise  @relation(fields: [exerciseId], references: [id])
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, exerciseId, date])
+  @@map("workout_logs")
+  // Note: Zaman serisi verileri için TimescaleDB hypertable olarak ayarlanabilir
+}
+
+// Besinler
+model Food {
+  id             Int            @id @default(autoincrement())
+  encryptedName  String         @db.Text // Encrypted
+  calories       Float          // Encrypted
+  protein        Float          // Encrypted
+  carbs          Float          // Encrypted
+  fat            Float          // Encrypted
+  fiber          Float?         // Encrypted
+  sugar          Float?         // Encrypted
+  servingSize    Float          @default(100) @map("serving_size") // Encrypted
+  servingUnit    String         @default("g") @map("serving_unit") @db.VarChar(20)
+  isAvailable    Boolean        @default(false)
+  prepTime       Int?           // Encrypted
+  encryptedIngredients String[] @default([]) // Encrypted
+  createdAt      DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime       @default(now()) @map("updated_at") @db.Timestamptz(6)
+  foodLogs       FoodLog[]
+  mealPlanItems  MealPlanItem[]
+
+  @@index([isAvailable])
+  @@map("foods")
+}
+
+// Kullanıcı Beslenme Planları
+model UserMealPlan {
+  id               Int            @id @default(autoincrement())
+  userId           String         @map("user_id") @db.Uuid
+  displayName      String         @db.VarChar(100) // Yeni: Paket adı
+  encryptedName    String         @db.Text // Encrypted
+  encryptedDescription String?    @db.Text // Encrypted
+  isPublic         Boolean        @default(false)
+  price            Float?         // Encrypted
+  rating           Float?         @default(0)
+  soldCount        Int            @default(0)
+  tags             String[]       @default([])
+  visibilityToken  String?        @unique @db.VarChar(255)
+  createdAt        DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime       @default(now()) @map("updated_at") @db.Timestamptz(6)
+  mealPlanItems    MealPlanItem[]
+  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions     Transaction[]
+
+  @@index([userId, isPublic, rating])
+  @@map("user_meal_plans")
+}
+
+// Beslenme Planı Öğeleri
+model MealPlanItem {
+  id           Int          @id @default(autoincrement())
+  mealPlanId   Int          @map("meal_plan_id")
+  foodId       Int          @map("food_id")
+  mealType     MealType     @map("meal_type")
+  dayOfWeek    Int?         @map("day_of_week")
+  portionSize  Float        @map("portion_size") // Encrypted
+  encryptedNotes String?    @db.Text // Encrypted
+  createdAt    DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime     @default(now()) @map("updated_at") @db.Timestamptz(6)
+  food         Food         @relation(fields: [foodId], references: [id])
+  mealPlan     UserMealPlan @relation(fields: [mealPlanId], references: [id], onDelete: Cascade)
+
+  @@index([mealPlanId, foodId, mealType, dayOfWeek])
+  @@map("meal_plan_items")
+}
+
+// Beslenme Logları
+model FoodLog {
+  id           BigInt    @id @default(autoincrement())
+  userId       String    @map("user_id") @db.Uuid
+  foodId       Int       @map("food_id")
+  mealType     MealType  @map("meal_type")
+  date         DateTime  @default(now()) @db.Timestamptz(6)
+  portionSize  Float     @map("portion_size") // Encrypted
+  encryptedNotes String? @db.Text // Encrypted
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  food         Food      @relation(fields: [foodId], references: [id])
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, foodId, date, mealType])
+  @@map("food_logs")
+  // Note: Zaman serisi verileri için TimescaleDB hypertable olarak ayarlanabilir
+}
+
+// İlerleme Logları
+model ProgressLog {
+  id               BigInt    @id @default(autoincrement())
+  userId           String    @map("user_id") @db.Uuid
+  date             DateTime  @default(now()) @db.Timestamptz(6)
+  weight           Float?    // Encrypted
+  caloriesConsumed Float?    @map("calories_consumed") // Encrypted
+  caloriesBurned   Float?    @map("calories_burned") // Encrypted
+  waterIntake      Float?    @map("water_intake") // Encrypted
+  steps            Int?      // Encrypted
+  sleepHours       Float?    @map("sleep_hours") // Encrypted
+  mood             String?   @db.VarChar(50) // Encrypted
+  fatigueScore     Int?      @default(5) // Encrypted
+  encryptedNotes   String?   @db.Text // Encrypted
+  createdAt        DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+  user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@index([userId, date])
+  @@map("progress_logs")
+  // Note: Zaman serisi verileri için TimescaleDB hypertable olarak ayarlanabilir
+}
+
+// Vücut Ölçümleri
+model BodyMeasurement {
+  id                BigInt    @id @default(autoincrement())
+  userId            String    @map("user_id") @db.Uuid
+  date              DateTime  @default(now()) @db.Timestamptz(6)
+  chest             Float?    // Encrypted
+  waist             Float?    // Encrypted
+  hips              Float?    // Encrypted
+  biceps            Float?    // Encrypted
+  thighs            Float?    // Encrypted
+  bodyFatPercentage Float?    @map("body_fat_percentage") // Encrypted
+  encryptedNotes    String?   @db.Text // Encrypted
+  createdAt         DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@index([userId, date])
+  @@map("body_measurements")
+  // Note: Zaman serisi verileri için TimescaleDB hypertable olarak ayarlanabilir
+}
+
+// Denetim Logları
+model AuditLog {
+  id          BigInt    @id @default(autoincrement())
+  tableName   String    @map("table_name") @db.VarChar(50)
+  recordId    BigInt    @map("record_id")
+  userId      String?   @map("user_id") @db.Uuid
+  action      String    @db.VarChar(10)
+  oldData     Json?     @map("old_data") // Encrypted
+  newData     Json?     @map("new_data") // Encrypted
+  ipAddress   String    @db.VarChar(45)
+  deviceId    String?   @db.VarChar(255)
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  integrityHash String  @db.VarChar(64) // SHA-256 ile veri bütünlüğü
+  user        User?     @relation(fields: [userId], references: [id])
+
+  @@index([tableName, recordId, userId, createdAt])
+  @@map("audit_logs")
+  // Note: Zaman serisi verileri için TimescaleDB hypertable olarak ayarlanabilir
+}
+
+// Pazar Yeri İşlemleri
+model Transaction {
+  id             BigInt    @id @default(autoincrement())
+  buyerId        String    @map("buyer_id") @db.Uuid
+  sellerId       String    @map("seller_id") @db.Uuid
+  itemType       String    @db.VarChar(50)
+  itemId         Int       @map("item_id")
+  amount         Float     // Encrypted
+  status         TransactionStatus @default(pending)
+  paymentMethod  String?   @db.VarChar(50)
+  transactionHash String?  @db.VarChar(255) // Encrypted (Blockchain)
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+  buyer          User      @relation("Buyer", fields: [buyerId], references: [id], onDelete: Cascade)
+  seller         User      @relation("Seller", fields: [sellerId], references: [id], onDelete: Cascade)
+  mealPlan       UserMealPlan? @relation(fields: [itemId], references: [id], onDelete: SetNull)
+  workout        UserWorkout?  @relation(fields: [itemId], references: [id], onDelete: SetNull)
+
+  @@index([buyerId, sellerId, status, createdAt])
+  @@map("transactions")
+}
+
+// AI Kullanıcı Tercihleri
+model UserAIPreference {
+  id                  Int      @id @default(autoincrement())
+  userId              String   @unique @map("user_id") @db.Uuid
+  encryptedPreferredTime String? @db.Text // Encrypted
+  encryptedDietaryRestrictions String[] @default([]) // Encrypted
+  encryptedWorkoutFocus String[] @default([]) // Encrypted
+  maxPrepTime         Int?     // Encrypted
+  createdAt           DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime @default(now()) @map("updated_at") @db.Timestamptz(6)
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("user_ai_preferences")
+}
+
+// Enum Tanımları
+enum Gender {
+  male
+  female
+  other
+}
+
+enum Goal {
+  weight_loss
+  muscle_gain
+  maintenance
+}
+
+enum Difficulty {
+  easy
+  medium
+  hard
+}
+
+enum MealType {
+  breakfast
+  lunch
+  dinner
+  snack
+}
+
+enum UserRole {
+  user
+  expert
+  admin
+  super_admin
+}
+
+enum SubscriptionStatus {
+  free
+  premium
+  expired
+}
+
+enum TransactionStatus {
+  pending
+  completed
+  refunded
+  failed
+}
